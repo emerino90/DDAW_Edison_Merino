@@ -14,7 +14,7 @@
       </div>
       <div class="navlinks">
         <a href="{{ url_for('nuevo') }}">Nuevo producto</a>
-        <a href="{{ url_for('import_all') }}">Importar TXT/JSON/CSV</a>
+        <a href="{{ url_for('buscar') }}">Buscar</a>
       </div>
     </nav>
 
@@ -22,7 +22,7 @@
       {% if messages %}
         <ul class="flash">
           {% for cat, msg in messages %}
-          <li class="flash__item flash--{{ cat }}">{{ msg }}</li>
+            <li class="flash__item flash--{{ cat }}">{{ msg }}</li>
           {% endfor %}
         </ul>
       {% endif %}
@@ -32,6 +32,8 @@
       {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">Semana 9 — CRUD SQLite + TXT/JSON/CSV</footer>
+    <footer class="footer">
+      <small>Semana 11 • CRUD SQLite con Flask-WTF</small>
+    </footer>
   </body>
 </html>

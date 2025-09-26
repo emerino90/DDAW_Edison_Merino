@@ -1,11 +1,17 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="card">
+<section class="card">
   <div class="card__header">
     <h2>Inventario (SQLite)</h2>
-    <form class="searchbar" method="get" action="{{ url_for('home') }}">
-      <!-- Placeholder de búsqueda local si la quieres luego -->
+
+    <form class="searchbar" action="{{ url_for('buscar') }}" method="get">
+      <input class="input" type="text" name="q" placeholder="Buscar por nombre…" value="{{ q or '' }}">
+      <button class="btn btn-primary btn-small" type="submit">Buscar</button>
+      {% if q %}<a class="btn btn-ghost btn-small" href="{{ url_for('home') }}">Limpiar</a>{% endif %}
     </form>
+
+    <a class="btn btn-primary" href="{{ url_for('nuevo') }}">Nuevo producto</a>
   </div>
 
   <div class="table-wrapper">
@@ -16,27 +22,33 @@
         </tr>
       </thead>
       <tbody>
-        {% for p in productos %}
-        <tr>
-          <td>{{ p.id }}</td>
-          <td class="text-strong">{{ p.nombre }}</td>
-          <td>${{ '%.2f'|format(p.precio) }}</td>
-          <td>{{ p.cantidad }}</td>
-          <td class="actions">
-            <a class="btn btn-primary btn-small" href="{{ url_for('editar', pid=p.id) }}">Editar</a>
-            <form method="post" action="{{ url_for('eliminar', pid=p.id) }}">
-              {{ delete_form.hidden_tag() }}
-              <button class="btn btn-danger btn-small">Eliminar</button>
-            </form>
-          </td>
-        </tr>
+        {% if productos %}
+          {% for p in productos %}
+          <tr>
+            <td>{{ p.id }}</td>
+            <td class="text-strong">{{ p.nombre }}</td>
+            <td>${{ '%.2f'|format(p.precio) }}</td>
+            <td>{{ p.cantidad }}</td>
+            <td class="actions">
+              <a class="btn btn-small" href="{{ url_for('editar', pid=p.id) }}">Editar</a>
+              <form method="POST" action="{{ url_for('eliminar', pid=p.id) }}" onsubmit="return confirm('¿Eliminar {{p.nombre}}?')">
+                {{ delete_form.hidden_tag() }}
+                <button class="btn btn-danger btn-small">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
         {% else %}
-        <tr><td colspan="5"><div class="empty"><strong>Sin productos.</strong><p>Agrega uno nuevo o importa datos.</p></div></td></tr>
-        {% endfor %}
+          <tr><td colspan="5">Sin productos. Agrega uno nuevo.</td></tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
 
-  <p style="margin-top:12px;color:var(--muted)">Total ítems: <b>{{ total_items }}</b> · Valor total: <b>${{ '%.2f'|format(total_valor) }}</b></p>
-</div>
+  <p style="margin-top:12px">
+    <strong>Total ítems:</strong> {{ total_items }}
+    ·
+    <strong>Valor total:</strong> ${{ '%.2f'|format(total_valor) }}
+  </p>
+</section>
 {% endblock %}
