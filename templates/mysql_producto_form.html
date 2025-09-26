@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card card--form">
+  <h2>{{ titulo }}</h2>
+  <form method="post" class="form">
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      <label>Nombre</label>
+      {{ form.nombre(class="input") }}
+      {% for e in form.nombre.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="field">
+      <label>Precio</label>
+      {{ form.precio(class="input") }}
+      {% for e in form.precio.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="field">
+      <label>Stock</label>
+      {{ form.stock(class="input") }}
+      {% for e in form.stock.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{{ form.enviar.label.text }}</button>
+      <a class="btn" href="{{ url_for('mysql_productos_list') }}">Volver</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
