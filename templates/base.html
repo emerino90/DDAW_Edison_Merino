@@ -14,7 +14,7 @@
       </div>
       <div class="navlinks">
         <a href="{{ url_for('nuevo') }}">Nuevo producto</a>
-        <a href="{{ url_for('buscar') }}">Buscar</a>
+        <a href="{{ url_for('home') }}">Buscar</a>
       </div>
     </nav>
 
@@ -31,9 +31,5 @@
     <main class="container">
       {% block content %}{% endblock %}
     </main>
-
-    <footer class="footer">
-      <small>Semana 11 • CRUD SQLite con Flask-WTF</small>
-    </footer>
   </body>
 </html>
