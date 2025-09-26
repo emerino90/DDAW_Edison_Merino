@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card card--form">
+  <h2>Iniciar sesión</h2>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="field">
+      <label>Email</label>
+      {{ form.email(class="input") }}
+      {% for e in form.email.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      {{ form.password(class="input") }}
+      {% for e in form.password.errors %}<div class="error">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{{ form.enviar.label.text }}</button>
+      <a class="btn" href="{{ url_for('auth_register') }}">Crear cuenta</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
