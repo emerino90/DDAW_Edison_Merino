@@ -115,3 +115,45 @@ def eliminar(pid: int):
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
+    
+# ---------------------- SQLAlchemy (demo usuarios.db) ---------
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+# Carpeta /database y archivo usuarios.db
+DB_DIR = (Path(__file__).parent / "database")
+DB_DIR.mkdir(exist_ok=True)
+
+ENGINE = create_engine(f"sqlite:///{DB_DIR/'usuarios.db'}", echo=False, future=True)
+Base = declarative_base()
+
+class Usuario(Base):
+    __tablename__ = "usuarios"
+    id     = Column(Integer, primary_key=True)
+    nombre = Column(String(80), nullable=False)
+    email  = Column(String(120), nullable=False)
+
+Base.metadata.create_all(ENGINE)
+Session = sessionmaker(bind=ENGINE, expire_on_commit=False)
+
+@app.route("/usuarios/crear")
+def usuarios_crear():
+    """
+    Crea rápidamente un usuario de prueba:
+    /usuarios/crear?nombre=Ana&email=ana@mail.com
+    Si no mandas parámetros, usa valores demo.
+    """
+    nombre = (request.args.get("nombre") or "Usuario Demo").strip()
+    email  = (request.args.get("email")  or "demo@mail.com").strip()
+    with Session() as s:
+        s.add(Usuario(nombre=nombre, email=email))
+        s.commit()
+    return {"ok": True, "mensaje": f"Usuario '{nombre}' creado"}
+
+@app.route("/usuarios/listar")
+def usuarios_listar():
+    """Lista todos los usuarios de usuarios.db (SQLAlchemy)."""
+    with Session() as s:
+        users = s.query(Usuario).order_by(Usuario.id).all()
+    data = [{"id": u.id, "nombre": u.nombre, "email": u.email} for u in users]
+    return {"total": len(data), "usuarios": data}
