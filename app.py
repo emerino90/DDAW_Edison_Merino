@@ -3,6 +3,7 @@
 # Inventario (SQLite) + Login (MySQL) + CRUD MySQL
 # BD MySQL: desarrollo_web_edison
 # Tabla MySQL: productos(id_producto, nombre, precio, stock)
+# Semana 15
 # ==================================================
 from pathlib import Path
 import sqlite3
