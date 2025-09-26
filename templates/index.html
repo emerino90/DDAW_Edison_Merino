@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div class="card__header">
+    <h2>Inventario (SQLite)</h2>
+    <form class="searchbar" method="get" action="{{ url_for('home') }}">
+      <!-- Placeholder de búsqueda local si la quieres luego -->
+    </form>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Precio</th><th>Cantidad</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in productos %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td class="text-strong">{{ p.nombre }}</td>
+          <td>${{ '%.2f'|format(p.precio) }}</td>
+          <td>{{ p.cantidad }}</td>
+          <td class="actions">
+            <a class="btn btn-primary btn-small" href="{{ url_for('editar', pid=p.id) }}">Editar</a>
+            <form method="post" action="{{ url_for('eliminar', pid=p.id) }}">
+              {{ delete_form.hidden_tag() }}
+              <button class="btn btn-danger btn-small">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5"><div class="empty"><strong>Sin productos.</strong><p>Agrega uno nuevo o importa datos.</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:12px;color:var(--muted)">Total ítems: <b>{{ total_items }}</b> · Valor total: <b>${{ '%.2f'|format(total_valor) }}</b></p>
+</div>
+{% endblock %}
